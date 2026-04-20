@@ -1,0 +1,44 @@
+{
+  "folders": [
+    { "name": "⚙️  Workspaces (meta)", "path": "." },
+    { "name": "Agent Bot Idea Generator", "path": "../Git Repos/Agent_bot_idea_generator" },
+    { "name": "Automation", "path": "../Git Repos/Automation" },
+    { "name": "Autoresearch", "path": "../Git Repos/autoresearch" },
+    { "name": "Blogger Agent", "path": "../Git Repos/Blogger_agent" },
+    { "name": "Computer-use", "path": "../Git Repos/Computer-use" },
+    { "name": "Curriculum Vitae", "path": "../Git Repos/Curriculum-Vitae" },
+    { "name": "Experiments", "path": "../Git Repos/experiments" },
+    { "name": "Forge", "path": "../Git Repos/Forge" },
+    { "name": "HAZE", "path": "../Git Repos/HAZE-Handling-Ambiguous-Zero-clarity-Expressions-" },
+    { "name": "Image Deepfake Detection", "path": "../Git Repos/Image-deepfake-detection" },
+    { "name": "Intent", "path": "../Git Repos/intent" },
+    { "name": "Nanochat", "path": "../Git Repos/nanochat" },
+    { "name": "Personal Agents", "path": "../Git Repos/Personal-Agents" },
+    { "name": "Personal Agent Team", "path": "../Git Repos/Personal-Agent-Team" },
+    { "name": "Portfolio Website", "path": "../Git Repos/Portfolio_Website" },
+    { "name": "Quantum RL", "path": "../Git Repos/Quantum-Enhanced-Simulation-Learning-for-Reinforcement-Learning" },
+    { "name": "Simulating Anything", "path": "../Git Repos/Simulating-Anything" }
+  ],
+  "settings": {
+    "terminal.integrated.cwd": "${workspaceFolder}",
+    "terminal.integrated.splitCwd": "inherited",
+    "terminal.integrated.tabs.enabled": true,
+    "terminal.integrated.defaultProfile.windows": "Git Bash",
+    "files.exclude": {
+      "**/.git": true,
+      "**/__pycache__": true,
+      "**/node_modules": true,
+      "**/.venv": true
+    },
+    "search.useIgnoreFiles": true,
+    "git.openRepositoryInParentFolders": "always",
+    "explorer.compactFolders": false,
+    "workbench.editor.labelFormat": "short"
+  },
+  "extensions": {
+    "recommendations": [
+      "anthropic.claude-code",
+      "eamodio.gitlens"
+    ]
+  }
+}
