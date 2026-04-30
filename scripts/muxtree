@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+# muxtree — create numbered parallel worktrees for parallel Claude sessions
+# Usage: muxtree <branch-name> [count]
+# Creates worktrees/wt1, wt2, ... wtN from current HEAD (default count: 3)
+
+set -euo pipefail
+
+BRANCH="${1:-}"
+COUNT="${2:-3}"
+
+if [[ -z "$BRANCH" ]]; then
+    echo "Usage: muxtree <branch-name> [count]" >&2
+    echo "Creates worktrees/wt1..wtN with branch <branch-name>-wt<N>" >&2
+    exit 1
+fi
+
+# Sanitize: only allow alphanumeric, hyphens, underscores, slashes
+if ! [[ "$BRANCH" =~ ^[a-zA-Z0-9/_-]+$ ]]; then
+    echo "ERROR: branch name contains invalid characters" >&2
+    exit 1
+fi
+
+if ! [[ "$COUNT" =~ ^[1-9]$ ]]; then
+    echo "ERROR: count must be 1-9" >&2
+    exit 1
+fi
+
+REPO_ROOT="$(git rev-parse --show-toplevel)"
+WORKTREE_ROOT="$REPO_ROOT/worktrees"
+mkdir -p "$WORKTREE_ROOT"
+
+for ((i=1; i<=COUNT; i++)); do
+    DEST="$WORKTREE_ROOT/wt$i"
+    if [[ -d "$DEST" ]]; then
+        echo "wt$i exists — skipping" >&2
+        continue
+    fi
+    git worktree add "$DEST" -b "$BRANCH-wt$i" 2>/dev/null || \
+        git worktree add "$DEST" "$BRANCH-wt$i"
+    echo "Created: wt$i → $DEST"
+done
+
+echo ""
+echo "Done. Open $COUNT Claude Code sessions, one per worktree."
+echo "List worktrees: git worktree list"
+echo "Remove a worktree: git worktree remove worktrees/wtN"

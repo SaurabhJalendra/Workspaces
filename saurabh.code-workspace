@@ -1,23 +1,321 @@
 {
   "folders": [
-    { "name": "⚙️  Workspaces (meta)", "path": "." },
-    { "name": "Agent Bot Idea Generator", "path": "../Git Repos/Agent_bot_idea_generator" },
-    { "name": "Automation", "path": "../Git Repos/Automation" },
-    { "name": "Autoresearch", "path": "../Git Repos/autoresearch" },
-    { "name": "Blogger Agent", "path": "../Git Repos/Blogger_agent" },
-    { "name": "Computer-use", "path": "../Git Repos/Computer-use" },
-    { "name": "Curriculum Vitae", "path": "../Git Repos/Curriculum-Vitae" },
-    { "name": "Experiments", "path": "../Git Repos/experiments" },
-    { "name": "Forge", "path": "../Git Repos/Forge" },
-    { "name": "HAZE", "path": "../Git Repos/HAZE-Handling-Ambiguous-Zero-clarity-Expressions-" },
-    { "name": "Image Deepfake Detection", "path": "../Git Repos/Image-deepfake-detection" },
-    { "name": "Intent", "path": "../Git Repos/intent" },
-    { "name": "Nanochat", "path": "../Git Repos/nanochat" },
-    { "name": "Personal Agents", "path": "../Git Repos/Personal-Agents" },
-    { "name": "Personal Agent Team", "path": "../Git Repos/Personal-Agent-Team" },
-    { "name": "Portfolio Website", "path": "../Git Repos/Portfolio_Website" },
-    { "name": "Quantum RL", "path": "../Git Repos/Quantum-Enhanced-Simulation-Learning-for-Reinforcement-Learning" },
-    { "name": "Simulating Anything", "path": "../Git Repos/Simulating-Anything" }
+    {
+      "name": "⚙️  Workspace Root (meta)",
+      "path": "."
+    },
+    {
+      "name": "Personal Agents",
+      "path": "./Personal-Agents"
+    },
+    {
+      "name": "Email Daily Newsletter Summary",
+      "path": "./Email_daily_newsletter_summary"
+    },
+    {
+      "name": "Research",
+      "path": "./Research"
+    },
+    {
+      "name": "SKY AI",
+      "path": "./SKY-ai"
+    },
+    {
+      "name": "Theory of Possibilities",
+      "path": "./Theory_of_possibilities"
+    },
+    {
+      "name": "Agentic Setup",
+      "path": "./Agentic-setup"
+    },
+    {
+      "name": "AI Log Clustering",
+      "path": "./AI-Log-clustering"
+    },
+    {
+      "name": "AI Pathfinding",
+      "path": "./AI-Pathfinding"
+    },
+    {
+      "name": "AI Safety Audit Tool",
+      "path": "./AI-Safety-Audit-Tool"
+    },
+    {
+      "name": "AI Tech Aggregator",
+      "path": "./AI_tech_aggregator"
+    },
+    {
+      "name": "Analyst Agent",
+      "path": "./analyst_agent"
+    },
+    {
+      "name": "Analyst Agentic Coder",
+      "path": "./Analyst_agentic_coder"
+    },
+    {
+      "name": "Auto Formfilling",
+      "path": "./Auto-Formfilling"
+    },
+    {
+      "name": "Autoencoder DimReduction CIFAR10",
+      "path": "./Autoencoder_DimReduction_CIFAR10"
+    },
+    {
+      "name": "Autoresearch",
+      "path": "./autoresearch"
+    },
+    {
+      "name": "Bank Fraud Detection",
+      "path": "./Bank_fraud_detection"
+    },
+    {
+      "name": "Catch up with Numbers",
+      "path": "./Catch-up-with-Numbers"
+    },
+    {
+      "name": "Crypto",
+      "path": "./crypto"
+    },
+    {
+      "name": "Crypto Project",
+      "path": "./Crypto_project"
+    },
+    {
+      "name": "Curriculum Vitae",
+      "path": "./Curriculum-Vitae"
+    },
+    {
+      "name": "DDQ Autofilling",
+      "path": "./DDQAutofilling"
+    },
+    {
+      "name": "DDQ Auto V2",
+      "path": "./DDQAutoVersion2"
+    },
+    {
+      "name": "DDQ Auto V2.1",
+      "path": "./DDQAutoVersion2-1"
+    },
+    {
+      "name": "DeepGraviLens",
+      "path": "./deepgravilens"
+    },
+    {
+      "name": "DeepLearning CIFAR10 Classifier",
+      "path": "./DeepLearning-CIFAR10-Classifier"
+    },
+    {
+      "name": "Diabetes Risk Prediction",
+      "path": "./Diabetes-Risk-Prediction-"
+    },
+    {
+      "name": "Dividend Tax Exemption Portal",
+      "path": "./dividend-tax-exemption-portal"
+    },
+    {
+      "name": "Document Opening Tracking",
+      "path": "./Document_opening_tracking"
+    },
+    {
+      "name": "Drone Ground Control",
+      "path": "./Drone-Ground-Control"
+    },
+    {
+      "name": "EuroSAT LandUse Classifier",
+      "path": "./EuroSAT-LandUse-Classifier"
+    },
+    {
+      "name": "Extraction and Filling",
+      "path": "./Extraction_and_Filling"
+    },
+    {
+      "name": "Extraction Core",
+      "path": "./Extraction_core"
+    },
+    {
+      "name": "Fusion Model CT/MRI",
+      "path": "./Fusion-model-for-CT-and-MRI-data"
+    },
+    {
+      "name": "GAN / WGAN / SNGAN Comparison",
+      "path": "./GAN-WGAN-SNGAN-comparison"
+    },
+    {
+      "name": "GCS C++",
+      "path": "./gcs_cplus"
+    },
+    {
+      "name": "GCS Firmware",
+      "path": "./GCS-firmware"
+    },
+    {
+      "name": "GravitationalLens MultimodalDL",
+      "path": "./GravitationalLens-MultimodalDL"
+    },
+    {
+      "name": "HRF Retinal Edge Retrieval",
+      "path": "./HRF-Retinal-Edge-Retrieval"
+    },
+    {
+      "name": "Instagram Agent",
+      "path": "./instagram_agent"
+    },
+    {
+      "name": "Instagram & YouTube Embeddings",
+      "path": "./Instagram-and-youtube-embeddings"
+    },
+    {
+      "name": "Institution Grade Research Agent",
+      "path": "./Institution_grade_research_agent"
+    },
+    {
+      "name": "International Citizen",
+      "path": "./International-Citizen"
+    },
+    {
+      "name": "ISIN Allotment Automation",
+      "path": "./ISIN-allotment-automation-workflow"
+    },
+    {
+      "name": "ISIN Automation Web App",
+      "path": "./ISIN-Automation-Web-App"
+    },
+    {
+      "name": "JARVIS",
+      "path": "./Just-A-Rather-Very-Intelligent-System"
+    },
+    {
+      "name": "Jupyter R&D (Saurabh/Jatin)",
+      "path": "./Jupyter-R-D-Saurabh-Jatin"
+    },
+    {
+      "name": "Klares New MVP",
+      "path": "./Klares_new_MVP"
+    },
+    {
+      "name": "Knowledge Base",
+      "path": "./Knowledge-base"
+    },
+    {
+      "name": "Lavish",
+      "path": "./lavish"
+    },
+    {
+      "name": "Link Prediction (OGBL-Collab)",
+      "path": "./Link-prediction-for-ogbl-collab-dataset"
+    },
+    {
+      "name": "Literature Exploration & Comparison",
+      "path": "./Literature-Exploration-and-Comparison"
+    },
+    {
+      "name": "Multi Model System",
+      "path": "./Multi-Model-System"
+    },
+    {
+      "name": "n8n",
+      "path": "./n8n"
+    },
+    {
+      "name": "Nanochat",
+      "path": "./nanochat"
+    },
+    {
+      "name": "Network Centrality Node Classification",
+      "path": "./network-centrality-node-classification"
+    },
+    {
+      "name": "New Doc Categorizer",
+      "path": "./New_Doc_categorizer"
+    },
+    {
+      "name": "NGCS",
+      "path": "./NGCS"
+    },
+    {
+      "name": "Personal Agent Team",
+      "path": "./Personal-Agent-Team"
+    },
+    {
+      "name": "Portfolio Website",
+      "path": "./Portfolio_Website"
+    },
+    {
+      "name": "Problem Solving",
+      "path": "./Problem_solving"
+    },
+    {
+      "name": "Quantum RL",
+      "path": "./Quantum-Enhanced-Simulation-Learning-for-Reinforcement-Learning"
+    },
+    {
+      "name": "RL Traffic Optimization",
+      "path": "./Reinforcement-Learning-based-Traffic-Optimization"
+    },
+    {
+      "name": "Robotics Assignment 2",
+      "path": "./Robotics_assignment_2"
+    },
+    {
+      "name": "Robotics Lab 1 (AI/ML BITS)",
+      "path": "./robotics-lab1-ai-ml-bits"
+    },
+    {
+      "name": "Scanned PDF to DOCX",
+      "path": "./ScannedPDF-to-docx"
+    },
+    {
+      "name": "Self-hosted AI Starter Kit",
+      "path": "./self-hosted-ai-starter-kit"
+    },
+    {
+      "name": "Sentiment WordNet Review Analysis",
+      "path": "./sentiment-wordnet-review-analysis"
+    },
+    {
+      "name": "Simulating Anything",
+      "path": "./Simulating-Anything"
+    },
+    {
+      "name": "SKAI",
+      "path": "./SKAI-Self-Knowing-Artificial-Intelligence"
+    },
+    {
+      "name": "SkinDB",
+      "path": "./SkinDB"
+    },
+    {
+      "name": "SkinDB AI",
+      "path": "./skinDB-ai"
+    },
+    {
+      "name": "SKY AI Research Blueprint",
+      "path": "./sky-ai-research-blueprint"
+    },
+    {
+      "name": "SKY Advanced Research",
+      "path": "./SKYAdvancedResearch"
+    },
+    {
+      "name": "Statement Pipelines",
+      "path": "./statement-pipelines"
+    },
+    {
+      "name": "Synthetic Questionnaire Generation",
+      "path": "./Synthetic-Questionnaire-Generation-Pipeline"
+    },
+    {
+      "name": "Trading Agent",
+      "path": "./Trading-Agent"
+    },
+    {
+      "name": "Trailer Movie Analysis App",
+      "path": "./Trailer-Movie-Analysis-App"
+    },
+    {
+      "name": "Treasure Hunt (Frozen Lake + MAB)",
+      "path": "./Treasure-Hunt-in-the-Frozen-Lake-and-Optimizing-Movie-Recommendations-Using-Multi-Armed-Bandits"
+    }
   ],
   "settings": {
     "terminal.integrated.cwd": "${workspaceFolder}",

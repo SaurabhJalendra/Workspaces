@@ -33,3 +33,22 @@ npm-debug.log*
 
 # Claude local-only settings (shared team settings live in settings.json)
 .claude/settings.local.json
+
+# === Project repos (each is its own git repo — meta-repo ignores them) ===
+# This .gitignore lives at D:/Git repos/. The meta-repo tracks only:
+#   .claude/, CLAUDE.md, saurabh.code-workspace, scripts/, postmortems/, posts/, side-quests/
+# Every other top-level folder here is a separate git repo (its own .git/), ignored by this meta-repo.
+
+# Ignore all TOP-LEVEL folders only (leading / anchors to repo root)
+# Nested folders like .claude/skills/ are NOT affected by this pattern.
+/*/
+
+# Re-include workspace-managed top-level folders
+!/.claude/
+!/scripts/
+!/postmortems/
+!/posts/
+!/side-quests/
+
+# Worktrees (parallel Claude sessions)
+worktrees/
