@@ -1,8 +1,10 @@
 # Saurabh Workspace — Universal Rules
 
-> This is the workspace-level CLAUDE.md. Loaded automatically when Claude Code is opened from `D:/Workspaces/` or any child folder via the multi-root VS Code workspace (`saurabh.code-workspace`).
+> This is the workspace-level CLAUDE.md. Loaded automatically when Claude Code is opened from `D:/Git Repos/` or any child folder via the multi-root VS Code workspace.
 >
-> Project-specific rules live in each repo's own `CLAUDE.md` under `D:/Git repos/<repo>/`. They override or extend these universal rules.
+> Two workspace files exist (the repo set differs per machine): `saurabh-pc.code-workspace` and `saurabh-laptop.code-workspace`. Open the one matching the current machine.
+>
+> Project-specific rules live in each repo's own `CLAUDE.md` under `D:/Git Repos/<repo>/`. They override or extend these universal rules.
 
 ---
 
@@ -94,7 +96,7 @@
 - Use `superpowers:writing-skills` for skill creation
 - Skills need: precise 250-char description, allowed-tools, clear instructions
 - Don't ask — build it, save it, tell user what was created
-- Save to `D:/Git repos/.claude/skills/<name>/SKILL.md` (workspace) or `<project>/.claude/skills/` (project-specific)
+- Save to `D:/Git Repos/.claude/skills/<name>/SKILL.md` (workspace) or `<project>/.claude/skills/` (project-specific)
 
 ### 6j. Memory Active Use
 - MEMORY.md index loaded automatically — Sonnet picks up to 5 relevant files
@@ -176,7 +178,7 @@ When auto-running: state in ONE sentence what's being run, then run it. Don't li
 | New feature touches auth, secrets, payments, user data, file uploads | `/docs threat-model "feature name"` — STRIDE before implementation |
 | 7+ days since last security scan on active project | `/security-scan` — newly disclosed CVEs |
 | Major release (semver bump) approaching | `/security-scan` + soak verification + `/docs release` |
-| First commit in a project (no `.pre-commit-config.yaml`) | Suggest installing pre-commit framework with template at `D:/Git repos/.claude/templates/pre-commit-config-template.yaml` |
+| First commit in a project (no `.pre-commit-config.yaml`) | Suggest installing pre-commit framework with template at `D:/Git Repos/.claude/templates/pre-commit-config-template.yaml` |
 | Test coverage drops in `/go` step 1d | Suggest writing tests OR explicitly updating threshold (don't silently lower) |
 | Tests untouched 30+ days but code changed | Suggest mutation testing (Stryker/mutmut) to verify tests still catch bugs |
 | Adding external API call / web fetch / file read in user-controlled path | `/docs threat-model` — SSRF / path traversal / injection review |
@@ -267,7 +269,7 @@ Run `/wiki-lint` quarterly to catch contradictions, orphans, stale claims.
 
 **Pre-commit framework setup per project** (one-time):
 ```bash
-cp "D:/Git repos/.claude/templates/pre-commit-config-template.yaml" .pre-commit-config.yaml
+cp "D:/Git Repos/.claude/templates/pre-commit-config-template.yaml" .pre-commit-config.yaml
 # Uncomment relevant language sections
 pip install pre-commit
 pre-commit install
@@ -367,63 +369,76 @@ If any inheritance gap detected → flag to user before starting work.
 
 ## Workspace Structure
 
-```
-D:/Workspaces/
-├── .claude/
-│   ├── settings.json              # Hardened permissions (specific allow + deny)
-│   ├── skills/                    # Universal slash commands (used everywhere)
-│   │   ├── go/                   # Boris's daily-driver ship loop
-│   │   ├── morning/              # Session-start briefing
-│   │   ├── wrap/                 # Session-end ritual
-│   │   ├── postmortem/           # Blameless incident writeup
-│   │   ├── prune-skills/         # Quarterly skill audit
-│   │   └── adversarial-reviewer/ # 3-persona mandatory-dissent review
-│   ├── agents/
-│   │   └── staff-reviewer.md     # Senior architect review
-│   └── commands/                  # (empty — skills register as commands)
-├── CLAUDE.md                      # This file
-├── saurabh.code-workspace         # VS Code multi-root workspace (~80 repos)
-├── postmortems/by-year/YYYY/      # Cross-project incident writeups
-├── posts/                         # Public-facing writeups
-│   ├── drafts/
-│   └── published/
-├── side-quests/                   # Unscheduled prototypes (the MCP-origin pattern)
-└── scripts/
-    └── muxtree                    # Worktree creation tool
+The workspace root IS `D:/Git Repos/` — workspace config and project repos live as siblings here.
 
-D:/Git repos/<repo>/               # Actual project repos (~80)
-├── CLAUDE.md                      # Project-specific rules (overrides workspace)
-├── .claude/                       # Project-specific skills if any
-├── tasks/lessons.md               # Per-project mistake log
-├── wiki/                          # Per-project Karpathy LLM Wiki
-└── ...
+```
+D:/Git Repos/                       # Workspace root (also contains all repos)
+├── .claude/
+│   ├── settings.json               # Hardened permissions (specific allow + deny)
+│   ├── skills/                     # Universal slash commands
+│   │   ├── adversarial-reviewer/   # 3-persona mandatory-dissent review
+│   │   ├── commit/                 # Conventional commit creator
+│   │   ├── coordinator/            # 4-phase research → synthesize → implement → verify
+│   │   ├── debug/                  # Systematic debugging loop
+│   │   ├── docs/                   # Unified docs manager (CHANGELOG, ADR, PR notes, ...)
+│   │   ├── explore/                # Deep codebase exploration
+│   │   ├── go/                     # Boris's daily-driver ship loop
+│   │   ├── morning/                # Session-start briefing
+│   │   ├── postmortem/             # Blameless incident writeup
+│   │   ├── premortem/              # Pre-mortem before risky work
+│   │   ├── prune-skills/           # Quarterly skill audit
+│   │   ├── research/               # Multi-source research
+│   │   ├── review/                 # Single-agent code review
+│   │   ├── security-scan/          # SAST + dep audit + secret + license
+│   │   ├── wiki-lint/              # Wiki health check
+│   │   └── wrap/                   # Session-end ritual
+│   ├── agents/
+│   │   ├── documenter.md           # Doc maintainer
+│   │   ├── researcher.md           # Deep research
+│   │   └── staff-reviewer.md       # Senior architect review
+│   ├── output-styles/
+│   │   └── engineering.md
+│   └── templates/
+│       └── pre-commit-config-template.yaml
+├── CLAUDE.md                       # This file
+├── saurabh-pc.code-workspace       # VS Code workspace — PC repo set
+├── saurabh-laptop.code-workspace   # VS Code workspace — laptop repo set
+├── .gitignore
+├── scripts/
+│   └── muxtree                     # Worktree creation tool
+└── <repo-folders>/                 # Project repos as siblings (set differs per machine)
+    ├── CLAUDE.md                   # Project-specific rules (additive to workspace)
+    ├── .claude/                    # Project-specific skills if any
+    ├── tasks/lessons.md            # Per-project mistake log
+    ├── wiki/                       # Per-project Karpathy LLM Wiki
+    └── ...
 ```
 
 ---
 
 ## Per-Project Setup (when you start work in a new repo)
 
-Each repo under `D:/Git repos/` gets its own minimal config — workspace skills are inherited, only project-specific stuff goes in the repo:
+Each repo under `D:/Git Repos/` gets its own minimal config — workspace skills are inherited, only project-specific stuff goes in the repo:
 
 1. Project `CLAUDE.md` at repo root: stack, build/test commands, conventions
 2. `tasks/lessons.md`: empty file, log corrections here
 3. `wiki/` (Karpathy pattern): create if project will accumulate knowledge
 4. `.claude/settings.json` only if project needs different permissions/hooks than workspace defaults
 
-For full per-project bootstrap details: `D:/Git repos/Research/workspaces/projects/claude-code-strategy/SETUP.md`
+For full per-project bootstrap details: `D:/Git Repos/Research/workspaces/projects/claude-code-strategy/SETUP.md`
 
-For migrating an existing project: `D:/Git repos/Research/workspaces/projects/claude-code-strategy/MIGRATE-EXISTING.md`
+For migrating an existing project: `D:/Git Repos/Research/workspaces/projects/claude-code-strategy/MIGRATE-EXISTING.md`
 
 ---
 
 ## Worktrees (Parallel Claude Sessions)
 
-Use `D:/Workspaces/scripts/muxtree <branch-name> [count]` from inside any repo to create numbered parallel worktrees:
+Use `D:/Git Repos/scripts/muxtree <branch-name> [count]` from inside any repo to create numbered parallel worktrees:
 
 ```bash
-cd "D:/Git repos/SKY-ai"
-"D:/Workspaces/scripts/muxtree" feature-x 3
-# Creates: D:/Git repos/SKY-ai/worktrees/wt1, wt2, wt3
+cd "D:/Git Repos/SKY-ai"
+"D:/Git Repos/scripts/muxtree" feature-x 3
+# Creates: D:/Git Repos/SKY-ai/worktrees/wt1, wt2, wt3
 # Open 3 Claude Code sessions, one per worktree
 ```
 

@@ -1,0 +1,102 @@
+{
+  "folders": [
+    {
+      "name": "⚙️  Workspace Root (meta)",
+      "path": "."
+    },
+    {
+      "name": "Agent Bot Idea Generator",
+      "path": "./Agent_bot_idea_generator"
+    },
+    {
+      "name": "Automation",
+      "path": "./Automation"
+    },
+    {
+      "name": "Autoresearch",
+      "path": "./autoresearch"
+    },
+    {
+      "name": "Blogger Agent",
+      "path": "./Blogger_agent"
+    },
+    {
+      "name": "Computer Use",
+      "path": "./Computer-use"
+    },
+    {
+      "name": "Curriculum Vitae",
+      "path": "./Curriculum-Vitae"
+    },
+    {
+      "name": "Experiments",
+      "path": "./experiments"
+    },
+    {
+      "name": "Forge",
+      "path": "./Forge"
+    },
+    {
+      "name": "HAZE",
+      "path": "./HAZE-Handling-Ambiguous-Zero-clarity-Expressions-"
+    },
+    {
+      "name": "Image Deepfake Detection",
+      "path": "./Image-deepfake-detection"
+    },
+    {
+      "name": "Intent",
+      "path": "./intent"
+    },
+    {
+      "name": "Nanochat",
+      "path": "./nanochat"
+    },
+    {
+      "name": "Personal Agents",
+      "path": "./Personal-Agents"
+    },
+    {
+      "name": "Personal Agent Team",
+      "path": "./Personal-Agent-Team"
+    },
+    {
+      "name": "Portfolio Website",
+      "path": "./Portfolio_Website"
+    },
+    {
+      "name": "Quantum RL",
+      "path": "./Quantum-Enhanced-Simulation-Learning-for-Reinforcement-Learning"
+    },
+    {
+      "name": "Research",
+      "path": "./Research"
+    },
+    {
+      "name": "Simulating Anything",
+      "path": "./Simulating-Anything"
+    }
+  ],
+  "settings": {
+    "terminal.integrated.cwd": "${workspaceFolder}",
+    "terminal.integrated.splitCwd": "inherited",
+    "terminal.integrated.tabs.enabled": true,
+    "terminal.integrated.defaultProfile.windows": "Git Bash",
+    "files.exclude": {
+      "**/.git": true,
+      "**/__pycache__": true,
+      "**/node_modules": true,
+      "**/.venv": true
+    },
+    "search.useIgnoreFiles": true,
+    "git.openRepositoryInParentFolders": "always",
+    "explorer.compactFolders": false,
+    "workbench.editor.labelFormat": "short"
+  },
+  "extensions": {
+    "recommendations": [
+      "anthropic.claude-code",
+      "eamodio.gitlens"
+    ]
+  }
+}
