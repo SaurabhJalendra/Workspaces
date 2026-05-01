@@ -1,6 +1,6 @@
 ---
 name: launch
-description: Cat Wu's #evergreen-launch loop — prototype works → docs + blog + social + announcement ready by next morning. Multi-output launch coordinator. Fires after Internal-DAU 7-day gate passes.
+description: Cat Wu's evergreen-launch pattern — prototype works, then CHANGELOG + blog + social + announcement ready by next morning. Multi-output launch coordinator. Fires after Internal-DAU 7-day gate passes.
 allowed-tools: [Read, Write, Edit, Bash, Grep, Glob, Agent, Skill]
 ---
 
