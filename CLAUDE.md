@@ -182,6 +182,13 @@ When auto-running: state in ONE sentence what's being run, then run it. Don't li
 | Test coverage drops in `/go` step 1d | Suggest writing tests OR explicitly updating threshold (don't silently lower) |
 | Tests untouched 30+ days but code changed | Suggest mutation testing (Stryker/mutmut) to verify tests still catch bugs |
 | Adding external API call / web fetch / file read in user-controlled path | `/docs threat-model` — SSRF / path traversal / injection review |
+| About to `npm install`, `pip install`, `cargo add`, `go get`, etc. (NEW dependency) | `/tech-radar [package-name]` first — is this still the best choice in 2026? |
+| Choosing a framework / database / message queue / auth lib / deploy infra for new feature | `/tech-radar` BEFORE writing code — capture alternatives, decide deliberately |
+| User says "let's use X" for a non-trivial library/framework choice | `/tech-radar X` — verify it's still the right call, not last year's default |
+| Writing an ADR via `/docs adr` | Call `/tech-radar` FIRST to populate "Alternatives Considered" with real market data |
+| Quarterly stack health check (90+ days since last review) | `/tech-radar` per major dependency — flags dead deps, surfaces newer options |
+| User asks "what should I use for X?" | `/tech-radar X` — gives current state of art, not pre-trained defaults |
+| New model release from Anthropic | After `simplify` skill: also `/tech-radar` on stack — new model may handle older tools better OR new tools may have emerged |
 
 **Auto mode behavior on triggers (refer to Rule 6k for tiers):**
 - **Tier 2 triggers** (safe, reversible): RUN the command, state in one sentence what's running. Don't ask.
