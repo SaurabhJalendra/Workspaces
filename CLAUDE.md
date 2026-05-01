@@ -122,6 +122,20 @@ Beyond skills — these are background standards every project follows:
 
 When starting a new project: surface this list. When working on existing project missing items: surface gaps without nagging (one mention per session max).
 
+### 6n. Product Management Pattern (Cat Wu / Boris Cherny)
+
+Solo dev = solo PM. The PM patterns that scale to one person:
+
+- **Spec-as-prototype:** thin 1-page spec → 2-3 prototypes → pick one → ship. Use `/spec` skill. Skip the 20-page PRD.
+- **Internal-DAU gate:** use feature yourself daily for 7 consecutive days BEFORE any public release. Skip a day → reset the counter. The gate is hard. No exceptions.
+- **Demo-driven reviews:** weekly `/demo` replaces standups. Be honest about "did I actually use it." Cut without guilt.
+- **#evergreen-launch loop:** working prototype → CHANGELOG + blog + social + docs ready next morning. Use `/launch` skill. Marketing AFTER prototype, never before.
+- **Side quests reserved:** ~20% of week unscheduled. The MCP origin pattern. Best features come from itch-scratching, not roadmaps.
+- **Bottom-up decisions:** prototype before specifying. If unsure, build the cheapest version and use it for a week.
+- **Roadmap discipline:** Now (2-4 weeks) / Next (1-3 months) / Later (exploratory) / Recently Shipped / **Not Doing** sections. Maintain via `/docs roadmap`. The "Not Doing" section prevents same rejected ideas from coming back.
+- **Feature deprecation:** ADR-deprecate. Update `/docs adr` with deprecation status, supersede with new ADR, remove code in same session.
+- **Customer feedback is signal not roadmap:** track issues / Twitter / email mentions. Triage weekly. Patterns become roadmap items.
+
 ### 6m. Cost Economics Awareness
 
 Anthropic measures every design decision in tokens (Gtok/week). Solo equivalent:
@@ -222,6 +236,11 @@ When auto-running: state in ONE sentence what's being run, then run it. Don't li
 | Migration file created in db/migrations/, prisma/migrations/, etc. | `/migrate-safe` — 6-gate safety check before applying |
 | ALTER TABLE / DROP / new column in schema | `/migrate-safe` — pre-mortem + backup + dry-run before running |
 | Project missing LICENSE / README / CHANGELOG / lockfile | One mention per session — surface gap, suggest fix |
+| User says "let's build [feature]" / non-trivial idea | `/spec` — write 1-page thin spec, then 2-3 prototypes |
+| Working prototype + 7-day Internal-DAU passed | `/launch` — generate CHANGELOG + blog + social + docs |
+| Friday afternoon (or 7+ days since last) | `/demo` — weekly self-review, ship/iterate/cut decisions |
+| User asks "what should I cut?" / "what's actually used?" | `/demo` — honest audit |
+| Feature in progress >2 weeks with no ship | `/premortem` (find blocker) OR cut via `/demo` |
 
 **Auto mode behavior on triggers (refer to Rule 6k for tiers):**
 - **Tier 2 triggers** (safe, reversible): RUN the command, state in one sentence what's running. Don't ask.
