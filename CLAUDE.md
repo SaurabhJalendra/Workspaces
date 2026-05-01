@@ -122,6 +122,28 @@ Beyond skills — these are background standards every project follows:
 
 When starting a new project: surface this list. When working on existing project missing items: surface gaps without nagging (one mention per session max).
 
+### 6o. Goal-Setting Cadence (4 levels, never skip)
+
+The hierarchy that prevents drift:
+
+| Level | Cadence | Doc | Skill |
+|---|---|---|---|
+| **Vision** | Annual (Jan 1) | `D:/Git repos/VISION.md` | `/docs vision` |
+| **Quarterly goals** | Every 3 months | `D:/Git repos/goals/YYYY-Q[N].md` | `/docs goals` |
+| **Project IDEA** | Per-project kickoff | `<project>/IDEA.md` | `/docs idea` |
+| **Project roadmap** | Updated on ship | `<project>/ROADMAP.md` | `/docs roadmap` |
+| **Spec** | Per feature | `<project>/specs/YYYY-MM-DD-name.md` | `/spec` |
+| **Weekly** | Friday demo | `D:/Git repos/demos/YYYY-MM-DD-weekly.md` | `/demo` |
+| **Daily** | Session start | `tasks/lessons.md` review | `/morning` |
+
+**Quarterly review is mandatory.** Run `/docs review` on last working day of each quarter — honest goal-vs-actual. Self-deception kills the system.
+
+**Vision is rare to change.** Reviewed quarterly, updated annually. If updating mid-year, document why.
+
+**Goals cascade DOWN, not up:** Vision → Quarterly Goals → Project IDEA → Spec. If a project's IDEA can't trace to a quarterly goal, ask: should this project exist this quarter?
+
+**Side quests are budgeted, not banned.** ~20% of week. Track them. Sometimes they become next quarter's goals (the MCP origin pattern).
+
 ### 6n. Product Management Pattern (Cat Wu / Boris Cherny)
 
 Solo dev = solo PM. The PM patterns that scale to one person:
@@ -241,6 +263,12 @@ When auto-running: state in ONE sentence what's being run, then run it. Don't li
 | Friday afternoon (or 7+ days since last) | `/demo` — weekly self-review, ship/iterate/cut decisions |
 | User asks "what should I cut?" / "what's actually used?" | `/demo` — honest audit |
 | Feature in progress >2 weeks with no ship | `/premortem` (find blocker) OR cut via `/demo` |
+| First session of new year (Jan) | `/docs vision` — set annual vision before any work |
+| First session of new quarter (Apr/Jul/Oct/Jan) | `/docs goals` — set quarterly OKRs. Also `/docs review` on last quarter. |
+| Last working day of quarter | `/docs review` — honest goal-vs-actual retro |
+| User asks "am I on track?" / "what should I focus on?" | Read VISION.md + GOALS-YYYY-Q[N].md, answer aligned to those |
+| Project missing IDEA.md | `/docs idea` — north star per project |
+| 90+ days since last `/docs review` | Suggest quarterly review even if calendar quarter not over |
 
 **Auto mode behavior on triggers (refer to Rule 6k for tiers):**
 - **Tier 2 triggers** (safe, reversible): RUN the command, state in one sentence what's running. Don't ask.
