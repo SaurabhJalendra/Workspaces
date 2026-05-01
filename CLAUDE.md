@@ -106,6 +106,33 @@
 - Memory location: `C:/Users/Saurabh/.claude/projects/<workspace-id>/memory/`
 - Reference memory before answering questions about prior work — don't re-derive from search
 
+### 6l. Repository Hygiene (Standards That Compound)
+
+Beyond skills — these are background standards every project follows:
+
+- **Lockfiles committed:** `package-lock.json`, `yarn.lock`, `pnpm-lock.yaml`, `Cargo.lock`, `poetry.lock`, `go.sum`. NEVER `.gitignore` these. Reproducible builds depend on them.
+- **Dependency updates automated:** Renovate or Dependabot configured per project. Auto-PR for non-major bumps; review for major.
+- **License declared:** every project has a `LICENSE` file (MIT/Apache/BSD/proprietary — pick one explicitly). Public repos without LICENSE = unusable by others.
+- **README mandatory:** every project has a README with: purpose (1 sentence), setup (commands), usage (1 example), license. Even side projects.
+- **CHANGELOG maintained:** `CHANGELOG.md` updated on every meaningful commit (handled by `/docs changelog`). Keep-a-Changelog format.
+- **CI/CD on every push:** at minimum, run tests + lint on push. Free for small projects (GitHub Actions).
+- **SBOM at release:** for projects shipping artifacts, generate Software Bill of Materials. `npx @cyclonedx/cyclonedx-npm`, `pip-licenses`, `cargo cyclonedx`.
+- **Performance budget defined:** projects with UI or API have `perf-budget.json` (see `/perf-budget` skill).
+- **A11y level declared:** UI projects target `WCAG AA` minimum. Documented in project config.
+
+When starting a new project: surface this list. When working on existing project missing items: surface gaps without nagging (one mention per session max).
+
+### 6m. Cost Economics Awareness
+
+Anthropic measures every design decision in tokens (Gtok/week). Solo equivalent:
+
+- **Token cost:** be aware of session token cost. `/compact` aggressively when context approaches limits. Fork subagents to reuse KV cache. Edit existing files instead of rewriting.
+- **Cloud cost:** any cloud service (AWS, GCP, Vercel, etc.) — set billing alerts. Test with smallest tier. Profile cost before scaling.
+- **API cost:** for AI/ML features, track API spend per feature. Surface unexpected spikes.
+- **Build cost:** CI minutes are finite (free tier). Use caching aggressively. Skip CI on doc-only changes.
+
+When proposing infrastructure choices: state cost trade-off, not just technical trade-off.
+
 ### 6k. Auto Mode Behavior (Saurabh runs Claude in Auto Mode)
 
 **The user always runs in auto mode.** Pre-decide Tier 2 vs Tier 3 vs Tier 4 — don't make the user invoke routine commands.
@@ -189,6 +216,12 @@ When auto-running: state in ONE sentence what's being run, then run it. Don't li
 | Quarterly stack health check (90+ days since last review) | `/tech-radar` per major dependency — flags dead deps, surfaces newer options |
 | User asks "what should I use for X?" | `/tech-radar X` — gives current state of art, not pre-trained defaults |
 | New model release from Anthropic | After `simplify` skill: also `/tech-radar` on stack — new model may handle older tools better OR new tools may have emerged |
+| UI component changed / theme changed / color updated | `/a11y-check` — WCAG audit, contrast, focus management |
+| New project with UI (no perf-budget.json yet) | `/perf-budget set` — initialize bundle/latency/memory budgets |
+| Bundle size or build time grew significantly | `/perf-budget check` — surface regression before merge |
+| Migration file created in db/migrations/, prisma/migrations/, etc. | `/migrate-safe` — 6-gate safety check before applying |
+| ALTER TABLE / DROP / new column in schema | `/migrate-safe` — pre-mortem + backup + dry-run before running |
+| Project missing LICENSE / README / CHANGELOG / lockfile | One mention per session — surface gap, suggest fix |
 
 **Auto mode behavior on triggers (refer to Rule 6k for tiers):**
 - **Tier 2 triggers** (safe, reversible): RUN the command, state in one sentence what's running. Don't ask.
