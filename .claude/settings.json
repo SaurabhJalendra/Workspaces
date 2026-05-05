@@ -167,7 +167,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "(test -f \"$CLAUDE_FILE_PATH\" && (file=\"$CLAUDE_FILE_PATH\"; case \"$file\" in *.py) ruff format --silent \"$file\" 2>/dev/null || black -q \"$file\" 2>/dev/null ;; *.ts|*.tsx|*.js|*.jsx|*.json|*.md|*.yml|*.yaml) npx --silent prettier --write \"$file\" 2>/dev/null ;; *.go) gofmt -w \"$file\" 2>/dev/null ;; *.rs) rustfmt \"$file\" 2>/dev/null ;; esac)) || true"
+            "command": "(test -f \"$CLAUDE_FILE_PATH\" && (file=\"$CLAUDE_FILE_PATH\"; case \"$file\" in *.py) python -m ruff format --silent \"$file\" 2>/dev/null || python -m black -q \"$file\" 2>/dev/null ;; *.ts|*.tsx|*.js|*.jsx|*.json|*.md|*.yml|*.yaml) npx --silent prettier --write \"$file\" 2>/dev/null ;; *.go) gofmt -w \"$file\" 2>/dev/null ;; *.rs) rustfmt \"$file\" 2>/dev/null ;; esac)) || true"
           }
         ]
       }
