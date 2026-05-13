@@ -158,6 +158,78 @@ Solo dev = solo PM. The PM patterns that scale to one person:
 - **Feature deprecation:** ADR-deprecate. Update `/docs adr` with deprecation status, supersede with new ADR, remove code in same session.
 - **Customer feedback is signal not roadmap:** track issues / Twitter / email mentions. Triage weekly. Patterns become roadmap items.
 
+### 6r. Remote Control + Push Notifications (NATIVE iOS bridge)
+
+Anthropic shipped **Remote Control** (Feb 2026) + **mobile push notifications** (v2.1.110, Apr 16 2026). Replaces external bridges (ntfy.sh, Telegram bot, etc.) for the most common case.
+
+**What it does:**
+- Every Claude Code session can be controlled from claude.ai/code or Claude mobile app
+- Claude pushes to your phone when: long-running task completes OR Claude needs a decision
+- You respond from phone, Claude continues on your laptop/PC
+- Local filesystem, MCP servers, tools all stay on your machine
+- No inbound ports — outbound HTTPS only
+
+**One-time setup:**
+
+1. **Verify Claude Code v2.1.110+**:
+   ```bash
+   claude --version
+   ```
+2. **Authenticate via claude.ai (not API key)**:
+   ```bash
+   claude /login   # choose claude.ai option, NOT API key
+   ```
+3. **Install Claude iOS/Android app**, sign in with SAME account
+4. **Accept iOS notification permission** when prompted
+5. **In Claude Code terminal**: `/config`
+   - Enable **"Enable Remote Control for all sessions"** → makes every session remote-controllable
+   - Enable **"Push when Claude decides"** → turns on push notifications
+
+**Per-session activation methods (if not using "all sessions" toggle):**
+- `claude remote-control` — server mode, accepts up to 32 concurrent sessions, shows QR code (press space)
+- `claude --remote-control` — interactive session + remote-controllable
+- `/remote-control` inside an existing session — converts it to remote-controllable
+- VS Code extension: `/remote-control` in prompt box
+
+**Server mode for fleet operation:**
+```bash
+claude remote-control --spawn worktree --capacity 32 --name "Saurabh Fleet"
+```
+- `--spawn worktree`: each remote session gets its own git worktree (no conflicts!)
+- `--capacity 32`: up to 32 simultaneous remote sessions
+- Press `w` at runtime to toggle between same-dir and worktree spawn mode
+
+**Workflow patterns:**
+
+1. **Interactive work on laptop**: open Code, work normally. With "all sessions" toggle on, you can pick up from phone if you step away.
+2. **Background autonomous fleet**: open server-mode Claude Code on each machine. Configure /scheduled-tasks. When agents need input, push notifies phone. You answer in iOS app, work continues.
+3. **Phone-only check-ins**: open Claude app → Code tab → see all your sessions → tap one to continue → "what's the latest?" → answer questions → close.
+
+**Companion features in the same ecosystem:**
+
+| Feature | Trigger | Use case |
+|---|---|---|
+| **Remote Control** | Local session running | Steer in-progress work from another device |
+| **Dispatch** | Message from mobile | Delegate task — spawns Desktop session |
+| **Channels** | Telegram/Discord/iMessage push | React to external events (CI fail, chat) |
+| **Slack** | `@Claude` mention | PRs/reviews from team chat |
+| **Scheduled tasks** | Cron | Recurring automation (daily reviews) |
+| **Claude Code on the web** | claude.ai/code | Cloud sessions, no local setup |
+
+**Constraints:**
+- Remote Control requires claude.ai OAuth login (not API key)
+- One remote session per interactive process (unless server mode with `--capacity`)
+- Local Claude Code process must stay running — close terminal = session ends
+- Network outage >10 min times out the session
+- Ultraplan + Remote Control conflict (only one can hold claude.ai/code interface)
+
+**Anti-patterns:**
+- Trying to build ntfy.sh / Telegram bridges when Remote Control + push works natively
+- Closing the laptop while expecting the fleet to keep running (process dies)
+- Setting up external notification skills when Claude decides when to push for you
+
+**This obsoletes:** external `/notify` skill, file-based `/inbox` patterns for "agent asks user." Build those ONLY for cases Remote Control can't cover (e.g., when laptop is off and you want the session to wait).
+
 ### 6q. Model Selection Strategy (Cost-Optimized Fleet)
 
 **Three-tier ladder. Pick the cheapest model that works for the task.**
