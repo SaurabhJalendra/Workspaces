@@ -158,6 +158,53 @@ Solo dev = solo PM. The PM patterns that scale to one person:
 - **Feature deprecation:** ADR-deprecate. Update `/docs adr` with deprecation status, supersede with new ADR, remove code in same session.
 - **Customer feedback is signal not roadmap:** track issues / Twitter / email mentions. Triage weekly. Patterns become roadmap items.
 
+### 6q. Model Selection Strategy (Cost-Optimized Fleet)
+
+**Three-tier ladder. Pick the cheapest model that works for the task.**
+
+| Tier | Model | When to use |
+|---|---|---|
+| 1 | **Haiku 4.5** | Triage, file listing, simple summarization, mechanical transforms |
+| 2 | **Sonnet 4.6** | Routine implementation, code review, research, doc generation, fleet background work |
+| 3 | **Opus 4.7** | Synthesis, architectural judgment, adversarial review, postmortems, threat models, anything where reasoning quality matters more than speed |
+
+**Per-skill assignment:**
+
+| Skill | Model | Why |
+|---|---|---|
+| `/explore`, `/commit`, `/morning`, `/wrap`, `/fleet-status`, `/digest` | Sonnet | Mechanical, high-volume |
+| `/docs changelog`, `/docs sync`, `/docs pr`, `/docs release` | Sonnet | Pattern-based doc generation |
+| `/go`, `/code-review`, `/spec`, `/debug`, `/research`, `/review` | Sonnet | Balanced — common daily work |
+| `/perf-budget`, `/a11y-check`, `/security-scan`, `/migrate-safe` | Sonnet | Mostly runs tools + parses output |
+| `/coordinator`, `/orchestrate-fleet` | **Opus** | Synthesizes across multiple agents |
+| `/adversarial-reviewer`, `/staff-reviewer` (agent) | **Opus** | Judgment-heavy, mandatory dissent |
+| `/premortem`, `/postmortem`, `/docs adr`, `/docs threat-model` | **Opus** | Reasoning quality matters |
+| `/tech-radar` | **Opus** | Subtle market judgment, stay/watch/switch |
+| `documenter` (agent) | Sonnet | Mechanical doc updates |
+| `researcher` (agent) | Sonnet | Routine search + synthesize |
+| Background `/schedule` triggers | Sonnet | High-volume autonomous fleet |
+
+**Interactive vs autonomous defaults:**
+- **At keyboard (interactive)**: Opus by default. Max plan covers it. Best UX.
+- **`/schedule` background triggers**: Sonnet by default. Faster, higher rate limits, fits fleet volume.
+- **`/coordinator`-dispatched subagents**: Sonnet for research/implementation subagents, Opus for synthesis at top.
+
+**Fallback chain when limits hit:**
+1. Sonnet rate-limited → switch to Opus via `/model opus` (slower but still works)
+2. Opus rate-limited → wait for window OR use Anthropic API directly (separate billing, not Max plan)
+3. Both limited → batch the work, retry when windows reset
+
+**For `/schedule` triggers specifically:**
+- Default model in trigger config: Sonnet
+- High-stakes triggers (orchestrator, postmortem, adversarial review): Opus
+- If a Sonnet trigger fails with rate-limit error: configure auto-retry on Opus 30 minutes later
+
+**Anti-patterns:**
+- Using Opus for everything → blows through quota in days
+- Using Haiku for synthesis → misses cross-finding contradictions
+- Using Sonnet for adversarial review → not enough dissent / judgment depth
+- Switching models mid-task → context cache loss, slower
+
 ### 6m. Cost Economics Awareness
 
 Anthropic measures every design decision in tokens (Gtok/week). Solo equivalent:
