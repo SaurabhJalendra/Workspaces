@@ -25,6 +25,10 @@
       "path": "./Theory_of_possibilities"
     },
     {
+      "name": "Agency",
+      "path": "./agency"
+    },
+    {
       "name": "Agentic Setup",
       "path": "./Agentic-setup"
     },
@@ -327,6 +331,7 @@
       "**/__pycache__": true,
       "**/node_modules": true,
       "**/.venv": true,
+      "agency": true,
       "Agentic-setup": true,
       "AI_tech_aggregator": true,
       "AI-Log-clustering": true,

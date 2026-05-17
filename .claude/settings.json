@@ -137,7 +137,6 @@
 
       "// === Dangerous shell ===",
       "Bash(eval:*)", "Bash(exec:*)",
-      "Bash(:(){ :|:& };:*)",
       "Bash(dd if=:*)", "Bash(mkfs:*)", "Bash(fdisk:*)",
       "Bash(> /dev/sda:*)", "Bash(> /dev/null:*)",
 
@@ -178,7 +177,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "echo \"$CLAUDE_TOOL_INPUT\" | grep -qE '(rm -rf|chmod 777|--no-verify|push --force|push -f|reset --hard|git clean -fd|sudo|curl [^|]+\\| ?sh|wget [^|]+\\| ?sh|filter-branch|filter-repo|terraform destroy|kubectl delete|aws s3 rm|aws s3 sync --delete)' && (echo '🛑 BLOCKED: dangerous command pattern detected' >&2; exit 1) || exit 0"
+            "command": "echo \"$CLAUDE_TOOL_INPUT\" | grep -qE '(rm -rf|chmod 777|--no-verify|push --force|push -f|reset --hard|git clean -fd|sudo|curl [^|]+\\| ?sh|wget [^|]+\\| ?sh|filter-branch|filter-repo|terraform destroy|kubectl delete|aws s3 rm|aws s3 sync --delete|:\\(\\)\\s*\\{)' && (echo '🛑 BLOCKED: dangerous command pattern detected' >&2; exit 1) || exit 0"
           }
         ]
       }

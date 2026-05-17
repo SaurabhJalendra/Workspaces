@@ -46,6 +46,10 @@ npm-debug.log*
 # Re-include workspace-managed top-level folders
 !/.claude/
 !/scripts/
+!/routines/
+!/posts/
+!/postmortems/
+!/side-quests/
 
 # Worktrees (parallel Claude sessions)
 worktrees/
