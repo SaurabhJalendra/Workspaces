@@ -53,3 +53,8 @@ npm-debug.log*
 
 # Worktrees (parallel Claude sessions)
 worktrees/
+
+# === External skills (cloned from other git repos, installed per-machine) ===
+# Each entry below is a workspace skill that comes from its own external git repo.
+# Meta-repo does NOT track these; per-machine install via .claude/skills/EXTERNAL.md
+/.claude/skills/html-anything/
