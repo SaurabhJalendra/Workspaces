@@ -1,23 +1,31 @@
 #!/usr/bin/env bash
 #
-# sync-workspace — one-command workspace sync across laptop ↔ PC
+# sync-workspace — one-command sync for the Workspaces meta-repo across machines
 #
-# Pulls the meta-repo, installs missing external skills, and pulls every
-# project listed in this machine's .code-workspace file. Idempotent.
+# The git repo this script lives in is named "Workspaces" (canonical name on
+# GitHub: SaurabhJalendra/Workspaces). The local checkout path can be anything
+# — this script self-locates from its own filesystem position, so it works
+# regardless of where you cloned Workspaces.
+#
+# Pulls the Workspaces repo, installs missing external skills listed in
+# EXTERNAL.md, and pulls every project listed in this machine's
+# .code-workspace file (siblings to the Workspaces checkout). Idempotent.
 #
 # Usage:
+#   bash <path-to-script>/sync-workspace
+#   # examples:
 #   bash "D:/Git repos/scripts/sync-workspace"
-#   # or, if executable:
-#   "D:/Git repos/scripts/sync-workspace"
+#   bash ./scripts/sync-workspace        # from inside the Workspaces checkout
 #
-# Optional:
-#   bash sync-workspace laptop   # force machine detection
+# Optional first arg overrides machine detection:
+#   bash sync-workspace laptop
 #   bash sync-workspace pc
 #
 # What syncs:
-#   - Meta-repo (D:/Git repos): CLAUDE.md, .claude/, routines/, scripts/
-#   - External skills listed in EXTERNAL.md (currently: html-anything)
+#   - Workspaces repo (this checkout): CLAUDE.md, .claude/, routines/, scripts/
+#   - External skills listed in .claude/skills/EXTERNAL.md (currently: html-anything)
 #   - Each project named in saurabh-{laptop|pc}.code-workspace that has .git/
+#     (these projects live as siblings to the Workspaces checkout)
 #
 # What does NOT sync:
 #   - Uncommitted/unpushed work — commit first via /go or /wrap
@@ -26,7 +34,11 @@
 
 set -uo pipefail
 
-ROOT="D:/Git repos"
+# Self-locate: ROOT = the parent of the scripts/ directory that contains this script.
+# Works whether the Workspaces repo is cloned at D:/Git repos/, ~/work/Workspaces/,
+# or anywhere else.
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 LAPTOP_WS="$ROOT/saurabh-laptop.code-workspace"
 PC_WS="$ROOT/saurabh-pc.code-workspace"
 MACHINE="${1:-auto}"
