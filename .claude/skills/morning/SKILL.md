@@ -8,16 +8,77 @@ allowed-tools: [Bash, Read, Edit, Write, Grep, Glob]
 
 The PM-engineer ritual. Saurabh is the strategic decision-maker, I am the execution team. This skill runs in 4 phases.
 
-## ACTIVE PROJECTS (read these every morning)
+## ACTIVE PROJECTS — detect per machine, never hardcode
 
-Tier A (full briefing):
-- Personal-Agents
-- Email_daily_newsletter_summary
-- Analyst_agentic_coder
-- gcs_cplus
-- Research
+The Tier A list MUST be derived at runtime. Past versions hardcoded
+laptop-only projects (Email_daily_newsletter_summary, Analyst_agentic_coder,
+gcs_cplus) which broke /morning on PC. Detection lives in two steps below.
 
-Extend list if Saurabh signals others are active for the day.
+### Step 0: Determine candidate Tier A (run before Phase 1)
+
+Run this bash block. It auto-detects the machine via the same heuristic
+as `scripts/sync-workspace`, then ranks surviving projects by recent activity:
+
+```bash
+ROOT="D:/Git Repos"
+LAPTOP_WS="$ROOT/saurabh-laptop.code-workspace"
+PC_WS="$ROOT/saurabh-pc.code-workspace"
+
+ws_paths() {
+  grep -oE '"path"[[:space:]]*:[[:space:]]*"[^"]+"' "$1" \
+    | sed -E 's/.*"path"[[:space:]]*:[[:space:]]*"([^"]+)".*/\1/' \
+    | sed -E 's|^\./||' | grep -v '^\.$'
+}
+
+count_hits() {
+  local f="$1" n=0
+  while IFS= read -r p; do [ -d "$ROOT/$p/.git" ] && n=$((n+1)); done < <(ws_paths "$f")
+  echo "$n"
+}
+
+LAPTOP_HITS=$(count_hits "$LAPTOP_WS")
+PC_HITS=$(count_hits "$PC_WS")
+if [ "$LAPTOP_HITS" -ge "$PC_HITS" ]; then WS_FILE="$LAPTOP_WS"; MACHINE=laptop
+else                                       WS_FILE="$PC_WS";     MACHINE=pc
+fi
+echo "Detected machine: $MACHINE (workspace: $(basename "$WS_FILE"))"
+
+now=$(date +%s)
+while IFS= read -r p; do
+  abs="$ROOT/$p"
+  [ -d "$abs/.git" ] || continue
+  last=$(cd "$abs" && git log -1 --format=%ct 2>/dev/null) || continue
+  [ -z "$last" ] && continue
+  days_old=$(( (now - last) / 86400 ))
+  has_roadmap=no
+  [ -f "$abs/ROADMAP.md" ] && has_roadmap=yes
+  if [ "$has_roadmap" = "yes" ] || [ "$days_old" -le 30 ]; then
+    printf "%d\t%d\t%s\t%s\n" "$last" "$days_old" "$has_roadmap" "$p"
+  fi
+done < <(ws_paths "$WS_FILE") | sort -rn | head -5
+```
+
+Activity rule: a project survives if it has `ROADMAP.md` OR was committed
+in the last 30 days. Sort by most-recent commit, take top 5 = candidate Tier A.
+
+### Step 0.5: Confirm Tier A with Saurabh (WAIT for answer)
+
+Surface the candidate list verbatim, then STOP and wait:
+
+```
+Proposed Tier A for today (machine: <pc|laptop>):
+  1. <project>  (last commit Nd ago, ROADMAP: yes|no)
+  2. <project>  (last commit Nd ago, ROADMAP: yes|no)
+  3. ...
+
+Confirm with "go" / "yes", or override:
+  - "swap N for <other-project>" — replace slot N
+  - "add <project>" / "drop <project>" — adjust list
+  - "tier A is <p1>, <p2>, <p3>" — full override
+```
+
+Use the confirmed list as TIER_A for Phase 1 onward. Do NOT proceed to
+Phase 1 until Saurabh confirms.
 
 ## PHASE 1: Brief — what shipped
 
@@ -49,17 +110,18 @@ Each suggestion must be:
 
 ## PHASE 3: Present + ask (then WAIT)
 
-Present in this structure:
+Present in this structure (substitute every `<TIER_A_n>` placeholder with
+the confirmed project names from Step 0.5 — do NOT hardcode):
 
 ```markdown
 # Morning Briefing — YYYY-MM-DD
 
 ## Yesterday across active projects
-- Personal-Agents: [N commits — most-impactful summary]
-- Email_daily_newsletter_summary: [N commits — most-impactful summary]
-- Analyst_agentic_coder: [N commits — most-impactful summary]
-- gcs_cplus: [N commits — most-impactful summary]
-- Research: [N commits — most-impactful summary]
+- <TIER_A_1>: [N commits — most-impactful summary]
+- <TIER_A_2>: [N commits — most-impactful summary]
+- <TIER_A_3>: [N commits — most-impactful summary]
+- <TIER_A_4>: [N commits — most-impactful summary]
+- <TIER_A_5>: [N commits — most-impactful summary]
 
 ## Inbox status
 - [Project]: [N questions OR "all clear"]
@@ -70,14 +132,14 @@ Present in this structure:
 
 ## Today's suggested tasks (from each project's ROADMAP Now)
 
-### Focus candidates (high priority)
-- **Personal-Agents**: [Suggestion 1 — what + why + est minutes]
-- **Email_daily_newsletter_summary**: [Suggestion 1 — what + why + est minutes]
+### Focus candidates (high priority — top 2 from Tier A by recency)
+- **<TIER_A_1>**: [Suggestion 1 — what + why + est minutes]
+- **<TIER_A_2>**: [Suggestion 1 — what + why + est minutes]
 
-### Background candidates (medium priority)
-- **Analyst_agentic_coder**: [Suggestion 1]
-- **gcs_cplus**: [Suggestion 1]
-- **Research**: [Suggestion 1]
+### Background candidates (medium priority — remaining Tier A)
+- **<TIER_A_3>**: [Suggestion 1]
+- **<TIER_A_4>**: [Suggestion 1]
+- **<TIER_A_5>**: [Suggestion 1]
 
 ## Questions for you (decide before I plan)
 1. **Focus today**: Which 2-3 projects get active attention?
