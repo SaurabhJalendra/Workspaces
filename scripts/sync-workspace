@@ -1,0 +1,195 @@
+#!/usr/bin/env bash
+#
+# sync-workspace — one-command workspace sync across laptop ↔ PC
+#
+# Pulls the meta-repo, installs missing external skills, and pulls every
+# project listed in this machine's .code-workspace file. Idempotent.
+#
+# Usage:
+#   bash "D:/Git repos/scripts/sync-workspace"
+#   # or, if executable:
+#   "D:/Git repos/scripts/sync-workspace"
+#
+# Optional:
+#   bash sync-workspace laptop   # force machine detection
+#   bash sync-workspace pc
+#
+# What syncs:
+#   - Meta-repo (D:/Git repos): CLAUDE.md, .claude/, routines/, scripts/
+#   - External skills listed in EXTERNAL.md (currently: html-anything)
+#   - Each project named in saurabh-{laptop|pc}.code-workspace that has .git/
+#
+# What does NOT sync:
+#   - Uncommitted/unpushed work — commit first via /go or /wrap
+#   - Projects missing locally — listed as gaps, not auto-cloned
+#   - node_modules, .venv, dist — local-only by design
+
+set -uo pipefail
+
+ROOT="D:/Git repos"
+LAPTOP_WS="$ROOT/saurabh-laptop.code-workspace"
+PC_WS="$ROOT/saurabh-pc.code-workspace"
+MACHINE="${1:-auto}"
+
+# --- colored output (no-op if no TTY) ---
+if [ -t 1 ]; then
+  C_CYAN=$'\e[36m'; C_GREEN=$'\e[32m'; C_YELLOW=$'\e[33m'
+  C_RED=$'\e[31m';  C_GRAY=$'\e[90m';  C_RESET=$'\e[0m'
+else
+  C_CYAN=""; C_GREEN=""; C_YELLOW=""; C_RED=""; C_GRAY=""; C_RESET=""
+fi
+
+section()  { printf "\n${C_CYAN}=== %s ===${C_RESET}\n" "$1"; }
+ok()       { printf "  ${C_GREEN}[OK]${C_RESET}   %s\n" "$1"; }
+skip()     { printf "  ${C_YELLOW}[skip]${C_RESET} %s\n" "$1"; }
+fail()     { printf "  ${C_RED}[FAIL]${C_RESET} %s\n" "$1"; }
+info()     { printf "  ${C_YELLOW}[..]${C_RESET}   %s\n" "$1"; }
+dim()      { printf "    ${C_GRAY}%s${C_RESET}\n" "$1"; }
+
+# Extract project relative paths from a .code-workspace file (very small jq-free parser).
+# Looks for lines containing "path": "..." and skips "." entries.
+ws_projects() {
+  local f="$1"
+  grep -oE '"path"\s*:\s*"[^"]+"' "$f" \
+    | sed -E 's/.*"path"\s*:\s*"([^"]+)".*/\1/' \
+    | sed -E 's|^\./||' \
+    | grep -v '^\.$'
+}
+
+# Count how many of a workspace's projects exist as git repos locally.
+count_local_repos() {
+  local f="$1" n=0
+  while IFS= read -r p; do
+    [ -d "$ROOT/$p/.git" ] && n=$((n+1))
+  done < <(ws_projects "$f")
+  printf "%s" "$n"
+}
+
+# --- 1. Detect machine ---
+section "Detecting machine"
+if [ "$MACHINE" = "auto" ]; then
+  LAPTOP_TOTAL=$(ws_projects "$LAPTOP_WS" | wc -l | tr -d ' ')
+  PC_TOTAL=$(ws_projects "$PC_WS" | wc -l | tr -d ' ')
+  LAPTOP_HITS=$(count_local_repos "$LAPTOP_WS")
+  PC_HITS=$(count_local_repos "$PC_WS")
+  printf "  Laptop config matches: %s / %s\n" "$LAPTOP_HITS" "$LAPTOP_TOTAL"
+  printf "  PC config matches:     %s / %s\n" "$PC_HITS" "$PC_TOTAL"
+  if [ "$LAPTOP_HITS" -ge "$PC_HITS" ]; then MACHINE="laptop"; else MACHINE="pc"; fi
+fi
+case "$MACHINE" in
+  laptop) WS_FILE="$LAPTOP_WS" ;;
+  pc)     WS_FILE="$PC_WS" ;;
+  *)      fail "unknown machine: $MACHINE"; exit 1 ;;
+esac
+printf "  ${C_GREEN}Detected: %s (%s)${C_RESET}\n" "$MACHINE" "$(basename "$WS_FILE")"
+
+# --- 2. Pull meta-repo ---
+section "Pulling meta-repo"
+cd "$ROOT" || { fail "cannot cd $ROOT"; exit 1; }
+if out=$(git pull --ff-only 2>&1); then
+  ok "meta-repo up to date"
+  printf "%s\n" "$out" | while IFS= read -r line; do dim "$line"; done
+else
+  fail "meta-repo pull failed (likely uncommitted changes)"
+  printf "%s\n" "$out" | while IFS= read -r line; do dim "$line"; done
+fi
+
+# --- 3. Install missing external skills ---
+section "Checking external skills (per EXTERNAL.md)"
+
+# html-anything
+HA_PATH="$ROOT/.claude/skills/html-anything"
+if [ ! -d "$HA_PATH" ]; then
+  info "html-anything not present — installing"
+  cd "$ROOT/.claude/skills" || exit 1
+  if git clone https://github.com/SaurabhJalendra/html-anything.git >/dev/null 2>&1; then
+    cd "$HA_PATH" || exit 1
+    info "  npm install"
+    npm install --no-audit --no-fund >/dev/null 2>&1
+    info "  npm run build"
+    npm run build >/dev/null 2>&1
+    if [ -f "$HA_PATH/dist/cli.js" ]; then
+      ok "html-anything installed and built"
+    else
+      fail "html-anything cloned but build failed — inspect $HA_PATH manually"
+    fi
+  else
+    fail "html-anything clone failed"
+  fi
+else
+  ok "html-anything already present"
+fi
+
+# --- 4. Pull each project ---
+section "Pulling project repos from $(basename "$WS_FILE")"
+PULLED=0; UPDATED=0; CLEAN=0
+MISSING=(); ERRORED=()
+
+while IFS= read -r rel; do
+  abs="$ROOT/$rel"
+  if [ -d "$abs/.git" ]; then
+    cd "$abs" || continue
+    if out=$(git pull --ff-only 2>&1); then
+      if echo "$out" | grep -q "Already up to date"; then
+        ok "$rel (already current)"
+        CLEAN=$((CLEAN+1))
+      else
+        ok "$rel (pulled)"
+        UPDATED=$((UPDATED+1))
+      fi
+    else
+      # Categorize the error so the summary can give useful guidance.
+      if   echo "$out" | grep -qi "no tracking information"; then       reason="no-tracking-branch"
+      elif echo "$out" | grep -qi "diverging branches\|not possible to fast-forward"; then reason="diverged"
+      elif echo "$out" | grep -qi "repository not found"; then          reason="remote-gone"
+      elif echo "$out" | grep -qi "refusing to merge unrelated"; then   reason="unrelated-histories"
+      elif echo "$out" | grep -qi "refs/heads/.* specifies to merge"; then reason="no-tracking-branch"
+      elif echo "$out" | grep -qi "authentication failed\|could not read username"; then reason="auth-failed"
+      elif echo "$out" | grep -qi "couldn't resolve host\|operation timed out"; then reason="network"
+      else                                                              reason="other"
+      fi
+      fail "$rel [$reason]"
+      ERRORED+=("$rel|$reason")
+    fi
+  else
+    skip "$rel (not cloned locally)"
+    MISSING+=("$rel")
+  fi
+done < <(ws_projects "$WS_FILE")
+
+# --- 5. Summary ---
+section "Summary"
+printf "  Machine:  %s\n" "$MACHINE"
+printf "  Pulled:   %d new updates\n" "$UPDATED"
+printf "  Current:  %d already up to date\n" "$CLEAN"
+printf "  Missing:  %d projects not cloned locally\n" "${#MISSING[@]}"
+printf "  Errored:  %d failed to pull\n" "${#ERRORED[@]}"
+
+if [ "${#MISSING[@]}" -gt 0 ]; then
+  printf "\n  ${C_YELLOW}To clone a missing project:${C_RESET}\n"
+  printf "    ${C_YELLOW}cd \"%s\" && git clone <project-url> <folder-name>${C_RESET}\n" "$ROOT"
+  printf "  ${C_YELLOW}Missing projects:${C_RESET}\n"
+  for m in "${MISSING[@]}"; do printf "    ${C_YELLOW}- %s${C_RESET}\n" "$m"; done
+fi
+
+if [ "${#ERRORED[@]}" -gt 0 ]; then
+  printf "\n  ${C_RED}Error breakdown (per repo):${C_RESET}\n"
+  declare -A REASON_COUNT
+  for entry in "${ERRORED[@]}"; do
+    reason="${entry##*|}"
+    REASON_COUNT[$reason]=$(( ${REASON_COUNT[$reason]:-0} + 1 ))
+  done
+  for reason in "${!REASON_COUNT[@]}"; do
+    printf "    ${C_RED}%-22s${C_RESET} %d repos\n" "$reason" "${REASON_COUNT[$reason]}"
+  done
+  printf "\n  ${C_YELLOW}How to fix each category:${C_RESET}\n"
+  printf "    ${C_YELLOW}no-tracking-branch${C_RESET}    cd <repo> && git branch --set-upstream-to=origin/main\n"
+  printf "    ${C_YELLOW}diverged${C_RESET}              cd <repo> && git status — push local commits OR git rebase origin/main\n"
+  printf "    ${C_YELLOW}remote-gone${C_RESET}           remote was deleted; remove repo from workspace or restore on GitHub\n"
+  printf "    ${C_YELLOW}unrelated-histories${C_RESET}   investigate before merging (usually means wrong remote)\n"
+  printf "    ${C_YELLOW}auth-failed${C_RESET}           re-auth gh (gh auth login) or check SSH keys\n"
+  printf "    ${C_YELLOW}network${C_RESET}               check internet / firewall / DNS\n"
+  printf "    ${C_YELLOW}other${C_RESET}                 run 'git pull' manually in the repo to see full error\n"
+fi
+
+printf "\n${C_CYAN}Done.${C_RESET}\n"
