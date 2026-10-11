@@ -5,76 +5,104 @@
       "path": "."
     },
     {
+      "name": "Personal Agents",
+      "path": "Personal-Agents"
+    },
+    {
+      "name": "P1 · Physics Lie Detector",
+      "path": "physics-lie-detector"
+    },
+    {
+      "name": "P2 · Inherited Cheating",
+      "path": "inherited-cheating"
+    },
+    {
+      "name": "P3 · When AI Dreams Lie",
+      "path": "when-dreams-lie"
+    },
+    {
+      "name": "P4 · Hierarchy Dividend",
+      "path": "hierarchy-dividend"
+    },
+    {
+      "name": "P5 · BayesGap",
+      "path": "bayesgap"
+    },
+    {
       "name": "Agent Bot Idea Generator",
-      "path": "./Agent_bot_idea_generator"
+      "path": "Agent_bot_idea_generator"
     },
     {
       "name": "Automation",
-      "path": "./Automation"
+      "path": "Automation"
     },
     {
       "name": "Autoresearch",
-      "path": "./autoresearch"
+      "path": "autoresearch"
     },
     {
       "name": "Blogger Agent",
-      "path": "./Blogger_agent"
+      "path": "Blogger_agent"
     },
     {
       "name": "Computer Use",
-      "path": "./Computer-use"
+      "path": "Computer-use"
+    },
+    {
+      "name": "Crumbsy",
+      "path": "crumbsy"
     },
     {
       "name": "Curriculum Vitae",
-      "path": "./Curriculum-Vitae"
+      "path": "Curriculum-Vitae"
     },
     {
       "name": "Experiments",
-      "path": "./experiments"
+      "path": "experiments"
+    },
+    {
+      "name": "FASTA wGUI",
+      "path": "FASTA_wGUI"
     },
     {
       "name": "Forge",
-      "path": "./Forge"
+      "path": "Forge"
     },
     {
       "name": "HAZE",
-      "path": "./HAZE-Handling-Ambiguous-Zero-clarity-Expressions-"
+      "path": "HAZE-Handling-Ambiguous-Zero-clarity-Expressions-"
     },
     {
       "name": "Image Deepfake Detection",
-      "path": "./Image-deepfake-detection"
+      "path": "Image-deepfake-detection"
     },
     {
       "name": "Intent",
-      "path": "./intent"
+      "path": "intent"
     },
     {
       "name": "Nanochat",
-      "path": "./nanochat"
-    },
-    {
-      "name": "Personal Agents",
-      "path": "./Personal-Agents"
+      "path": "nanochat"
     },
     {
       "name": "Personal Agent Team",
-      "path": "./Personal-Agent-Team"
+      "path": "Personal-Agent-Team"
     },
     {
       "name": "Portfolio Website",
-      "path": "./Portfolio_Website"
+      "path": "Portfolio_Website"
     },
     {
       "name": "Quantum RL",
-      "path": "./Quantum-Enhanced-Simulation-Learning-for-Reinforcement-Learning"
+      "path": "Quantum-Enhanced-Simulation-Learning-for-Reinforcement-Learning"
     },
     {
       "name": "Research",
-      "path": "./Research"
+      "path": "Research"
     },
     {
       "name": "Simulating Anything",
-      "path": "./Simulating-Anything"
+      "path": "Simulating-Anything"
     }
   ],
   "settings": {
@@ -87,13 +115,20 @@
       "**/__pycache__": true,
       "**/node_modules": true,
       "**/.venv": true,
+      "physics-lie-detector": true,
+      "inherited-cheating": true,
+      "when-dreams-lie": true,
+      "hierarchy-dividend": true,
+      "bayesgap": true,
       "Agent_bot_idea_generator": true,
       "Automation": true,
       "autoresearch": true,
       "Blogger_agent": true,
       "Computer-use": true,
+      "crumbsy": true,
       "Curriculum-Vitae": true,
       "experiments": true,
+      "FASTA_wGUI": true,
       "Forge": true,
       "HAZE-Handling-Ambiguous-Zero-clarity-Expressions-": true,
       "Image-deepfake-detection": true,
