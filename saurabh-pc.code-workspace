@@ -1,5 +1,10 @@
 {
   "folders": [
+		{ "path": "./bayesgap" },
+		{ "path": "./hierarchy-dividend" },
+		{ "path": "./when-dreams-lie" },
+		{ "path": "./inherited-cheating" },
+		{ "path": "./physics-lie-detector" },
     {
       "name": "⚙️  Workspace Root (meta)",
       "path": "."
